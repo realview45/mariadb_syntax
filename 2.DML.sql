@@ -15,9 +15,9 @@ delete from author where id=4;
 select 컬럼1, 컬럼2 from 테이블명;
 select name, email from author;
 select * from author;
---*모든 컬럼을 의미 where가빠지면 모든 데이터
+--*(모든 컬럼)을 의미 where가빠지면 모든 데이터
 
---select 조건절(where) 활용 행조회
+--select 조건절(where) 활용 행조회(데이터의 개수)
 select * from author where id =1;
 select * from author where name ='홍길동';
 select * from author where id >2 and name='홍길동';
@@ -45,6 +45,7 @@ select * from author order by id desc limit 1;
 
 --별칭(alias)를 이용한 select
 select name as '이름', email as '이메일' from author;
+select name '이름', email '이메일' from author;
 select a.name, a.email from author as a;--테이블 여러개가 엮였을 때 별칭으로 테이블명시
 select a.name, a.email from author a;
 
@@ -55,3 +56,18 @@ select * from author where password is not null;
 --프로그래머스 sql문제풀이
 --여러기준으로 정렬하기
 --상위 n개 레코드
+
+
+--요약
+--DDL: CREATE, ALTER, DROP
+컬럼명 컬럼타입 제약조건에
+fk 는 테이블타입 제약조건
+describe 타입
+pk,fk,unique 컬럼에 인덱스가 생성된다.
+--DML: INSERT, UPDATE, DELETE, SELECT
+       회원가입 정보수정 
+            컬럼을 만들어 y/n
+               회원탈퇴(데이터를 지우는 것을 지양)
+            Soft delete Hard delete
+
+            코딩테스트 계속 하기

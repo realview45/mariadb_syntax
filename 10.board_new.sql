@@ -19,7 +19,7 @@ foreign key(post_id)references post(id), foreign key(author_id)references author
 -- fk를 안걸어도 논리적으로 관계가 있다면 관계가 있음 실무에서 fk를 많이 안 검 일반적으로 건다.
 
 -- 복합키를 이용한 연결(junction) 테이블 생성 
-create table author_post_list ( author_id bigint not null, post_id bigint not null,
+create table author_post_list (author_id bigint not null, post_id bigint not null,
 primary key(post_id, author_id),  
 foreign key(post_id)references post(id), foreign key(author_id)references author(id));
 

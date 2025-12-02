@@ -33,18 +33,18 @@ select name, email from author union select title, contents from post;
 -- union은 기본적으로 distinct 적용. 중복허용하려면 union all 사용.
 select name, email from author union all select title, contents from post;
 
--- 서브쿼리 : select문 안에 또다른 select문을 서브쿼리라함
+-- 서브쿼리 : select문 안에 또다른 select문을 서브쿼리라함 많이 사용 대부분경우 join으로 대체가능
 -- where절 안에 서브쿼리
 -- 한번이라도 글을 쓴 author의 목록조회(중복제거)
 select distinct a.* from author a inner join post p on a.id=p.author_id;
 
 --null값은 in조건절에서 자동으로 제외
-select * from author where id in (select author_id from post);
+select * from author where id in (select author_id from post);--중복값 자동 제외
 
 -- 컬럼 위치에 서브쿼리
 -- 회원별로 본인의 쓴 글의 개수를 출력. ex)email, post_count 
 select email, (select count(*) from post p where p.author_id=a.id) -- 매번 조회하러가서 조인보다 성능안좋음
-    as post_count from author a;
+    as post_count from author a; -- 1넣고 count 2넣고 count 3넣고 count 값구하고..
 
 -- from절 위치에 서브쿼리(잘 안씀)
 select a.* from (select * from author) as a;
@@ -58,6 +58,7 @@ select a.email, count(p.id) from author a left join post p on a.id=p.author_id g
     --author를 전부다 출력하되 이메일이 중복된 값은 묶는다. p.id는 not null이므로 개수 세기에 적당
                                                                                 --한행씩 나눠주기
                                                                                 --default는 전체
+                                                                                id값으로 묶은뒤 post 개수 count
 select a.email, count(IFNULL(P.ID, NULL)) from author a 
 left join post p on a.id=p.author_id 
 group by a.email;
@@ -70,13 +71,13 @@ select avg(age) from author;
 -- 소수점 3번째 자리까지 반올림
 select round(avg(age), 3) from author;
 
---group by와 집계함수
+--group by와 집계함수 매우 많이 활용
 --회원의 이름별 회원숫자를 출력하고, 이름별 나이의 평균값을 출력하라.
 select name, count(*) as count, avg(age) as age from author group by name;
                                그룹바이된 결과값 내에서의 카운트, 평균
 
 
--- where와 group by
+-- where와 group by 상관X
 -- 날짜값이 null인 데이터는 제외하고, 날짜별 post 글의 개수를 출력.
 select date_format(created_time,'%Y-%m-%d') as date, count(*) from post 
 where created_time is not null 
@@ -92,7 +93,7 @@ group by date_format(created_time,'%Y-%m-%d');
 --자동차 종류 별 특정 옵션이 포함된 자동차 수 구하기
 --입양 시각 구하기(1)
 
---group by와 having
+--group by와 having(group by된 데이터에 대한 조건 상관O)
 --having은 group by를 통해 나온 집계값에 대한 조건
 --글을 2번 이상 쓴 사람 author_id ID찾기
 select author_id, count(*) from post group by author_id; 
@@ -100,4 +101,13 @@ select author_id from post group by author_id having count(*) >=2;
 
 --동명 동물 수 찾기 -> having
 --카테고리 별 도서 판매량 집계하기 -> join까지
+Book BookSales에 fk걸려있음 없는 책을 팔 수 없으므로
+
 --조건에 맞는 사용자와 총 거래금액 조회하기 -> join까지
+
+--다중열 group by
+--group by 첫번째컬럼, 두번째 컬럼 : 첫번째 컬럼으로 grouping 이후에 두번째컬럼으로 grouping
+--post 테이블에서 작성자별로 구분하여 같은 제목의 글의 개수를 출력하시오.
+select author_id, title, count(*) from post group by author_id, title;
+select author_id, title, count(*) from post inner join author_post_list ap on post.id = ap.post_id group by ap.author_id, post.title;
+--재구매가 일어난 상품과 회원 리스트 구하기

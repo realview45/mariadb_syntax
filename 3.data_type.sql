@@ -95,3 +95,13 @@ select * from post where created_time like '2025-11%';
 
 --실습 : 2025년 11월1일부터 11월19일까지의 데이터를 조회 시분초 때문에
 select * from post where created_time >= '2025-11-01' and created_time < '2025-11-20';
+
+
+--요약
+숫자(정수 tinyint, int, bigint, 실수 decimal고정소수점(오차발생X) float, double(부동소수점)(오차발생))
+문자(char(고정길이 빈공간 공백 정해진 길이 상징성 varchar를 써도 상관없음 주민번호 전화번호 성별), 
+    varchar(가변길이 공간효율적 메모리기반 저장 성능좋음), text(가변길이 디스크기반 저장 공간효율적))
+
+enum 원하는 데이터 종류의 타입을 지정한다. 없는 값을 집어 넣는 것은 불가
+date(연월일), datetime(연월일시분초)
+IS NULL, IS NOT NULL 만 사용
